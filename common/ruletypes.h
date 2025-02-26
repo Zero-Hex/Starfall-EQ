@@ -1166,7 +1166,7 @@ RULE_CATEGORY_END()
 
 RULE_CATEGORY(CUSTOM)
 // Custom Rules for Different Effects.
-RULE_BOOL(Custom, 	SuspendGroupBuffs, 						true, 	"Enable this to cause self buffs and group's buffs to not tick down")
+RULE_BOOL(Custom, SuspendGroupBuffs, true, "Enable this to cause self buffs and group's buffs to not tick down.")
 RULE_CATEGORY_END()
 
 
