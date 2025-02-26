@@ -438,6 +438,7 @@ public:
 	bool UseBardSpellLogic(uint16 spell_id = 0xffff, int slot = -1);
 
 	//Buff
+	bool IsGroupSuspendableBuff(uint16 spell_id, Buffs_Struct buff);
 	void BuffProcess();
 	virtual void DoBuffTic(const Buffs_Struct &buff, int slot, Mob* caster = nullptr);
 	void BuffFadeBySpellID(uint16 spell_id);
@@ -479,6 +480,7 @@ public:
 	std::vector<uint16> GetBuffSpellIDs();
 	bool FindBuff(uint16 spell_id, uint16 caster_id = 0);
 	uint16 FindBuffBySlot(int slot);
+	int FindFirstBuffSlotBySpellId(uint16 spell_id);
 	uint32 BuffCount(bool is_beneficial = true, bool is_detrimental = true);
 	bool FindType(uint16 type, bool bOffensive = false, uint16 threshold = 100);
 	int16 GetBuffSlotFromType(uint16 type);
