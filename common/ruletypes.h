@@ -1164,7 +1164,7 @@ RULE_REAL(EvolvingItems, PercentOfRaidExperience, 0.1, "Percentage of solo exper
 RULE_INT(EvolvingItems, DelayUponEquipping, 30000, "Delay in ms before an evolving item will earn rewards after equipping.  Default is 30000ms or 30s.")
 RULE_CATEGORY_END()
 
-RULE_CATEGORY_CUSTOM()
+RULE_CATEGORY(CUSTOM)
 // Custom Rules for Different Effects.
 RULE_BOOL(Custom, 	SuspendGroupBuffs, 						true, 	"Enable this to cause self buffs and group's buffs to not tick down"
 RULE_CATEGORY_END()
