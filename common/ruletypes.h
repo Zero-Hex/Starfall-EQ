@@ -230,6 +230,7 @@ RULE_BOOL(Character, PlayerTradingLoreFeedback, true, "If enabled, during a play
 RULE_INT(Character, MendAlwaysSucceedValue, 199, "Value at which mend will always succeed its skill check. Default: 199")
 RULE_BOOL(Character, SneakAlwaysSucceedOver100, false, "When sneak skill is over 100, always succeed sneak/hide. Default: false")
 RULE_INT(Character, BandolierSwapDelay, 0, "Bandolier swap delay in milliseconds, default is 0")
+RULE_BOOL(Character, EnableQuestExperience, true, "Whether or not Quest experience is enabled.")
 RULE_BOOL(Character, EnableHackedFastCampForGM, false, "Enables hacked fast camp for GM clients, if the GM doesn't have a hacked client they'll camp like normal")
 RULE_CATEGORY_END()
 
@@ -289,6 +290,7 @@ RULE_BOOL(Pets, ClientPetsUseOwnerNameInLastName, true, "Disable this to keep cl
 RULE_BOOL(Pets, CanTakeNoDrop, false, "Setting whether anyone can give no-drop items to pets")
 RULE_INT(Pets, PetTauntRange, 150, "Range at which a pet will taunt targets.")
 RULE_BOOL(Pets, AlwaysAllowPetRename, false, "Enable this option to allow /changepetname to work without enabling a pet name change via scripts.")
+RULE_BOOL(Pets, UsePetCommandImpliedTargeting, false, "Infer pet command (/pet attack) target.")
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(GM)
@@ -467,6 +469,7 @@ RULE_INT(Spells, AI_HealHPPct, 50, "Hitpoint percentage at which NPC starts heal
 RULE_BOOL(Spells, SHDProcIDOffByOne, true, "Pre June 2009 SHD spell procs were off by 1, they stopped doing this in June 2009 (UF+ spell files need this false)")
 RULE_BOOL(Spells, Jun182014HundredHandsRevamp, false, "This should be true for if you import a spell file newer than June 18, 2014")
 RULE_BOOL(Spells, SwarmPetTargetLock, false, "Use old method of swarm pets target locking till target dies then despawning")
+RULE_BOOL(Spells, SwarmPetFullAggro, false, "Add all of player's haters to swarm pet aggro list")
 RULE_BOOL(Spells, NPC_UseFocusFromSpells, true, "Allow NPC to use most spell derived focus effects")
 RULE_BOOL(Spells, NPC_UseFocusFromItems, false, "Allow NPC to use most item derived focus effects")
 RULE_BOOL(Spells, UseAdditiveFocusFromWornSlot, false, "Allows an additive focus effect to be calculated from worn slot. Does not apply limits checks. Can only have one additive focus rule be true.")
@@ -493,6 +496,9 @@ RULE_BOOL(Spells, InvisRequiresGroup, false, "Invis requires the the target to b
 RULE_INT(Spells, ClericInnateHealFocus, 5, "Clerics on live get a 5 pct innate heal focus")
 RULE_BOOL(Spells, DOTsScaleWithSpellDmg, false, "Allow SpellDmg stat to affect DoT spells")
 RULE_BOOL(Spells, HOTsScaleWithHealAmt, false, "Allow HealAmt stat to affect HoT spells")
+RULE_INT(Spells, DOTsScaleWithSpellDmgPerTickPercent, 0, "Allow SpellDmg stat to affect DoT spells but by a per tick")
+RULE_INT(Spells, HOTsScaleWithHealAmtPerTickPercent, 0, "Allow HealAmt stat to affect HoT spells but by a per tick")
+RULE_INT(Spells, PetsScaleWithOwnerPercent, 0, "Allow Pet spells to use the owners stats when casting spells by a percent")
 RULE_BOOL(Spells, CompoundLifetapHeals, true, "True: Lifetap heals calculate damage bonuses and then heal bonuses.  False:  Lifetaps heal using the amount damaged to mob.")
 RULE_BOOL(Spells, UseFadingMemoriesMaxLevel, false, "Enables to limit field in spell data to set the max level that over which an NPC will ignore fading memories effect and not lose aggro.")
 RULE_BOOL(Spells, FixBeaconHeading, false, "Beacon spells use casters heading to fix live bug.  False: Live like heading always 0.")
@@ -528,6 +534,7 @@ RULE_INT(Spells, TargetedAOEMaxTargets, 4, "Max number of targets a Targeted AOE
 RULE_INT(Spells, PointBlankAOEMaxTargets, 0, "Max number of targets a Point-Blank AOE spell can cast on. Set to 0 for no limit.")
 RULE_INT(Spells, DefaultAOEMaxTargets, 0, "Max number of targets that an AOE spell which does not meet other descriptions can cast on. Set to 0 for no limit.")
 RULE_BOOL(Spells, AllowFocusOnSkillDamageSpells, false, "Allow focus effects 185, 459, and 482 to enhance SkillAttack spell effect 193")
+RULE_STRING(Spells, AlwaysStackSpells, "", "Comma-Seperated list of spell IDs to always stack with every other spell, except themselves.")
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Combat)
@@ -684,6 +691,9 @@ RULE_REAL(NPC, NPCHealOnGateAmount, 25, "How much the NPC will heal on gate if e
 RULE_BOOL(NPC, AnimalsOpenDoors, true, "Determines or not whether animals open doors or not when they approach them")
 RULE_INT(NPC, MaxRaceID, 732, "Maximum Race ID, RoF2 by default supports up to 732")
 RULE_BOOL(NPC, DisableLastNames, false, "Enable to disable NPC Last Names")
+RULE_BOOL(NPC, SummonTimerScaling, false, "Enable to allow SummonTimer to scale to the maximum value defined by Maximum Summon Timer")
+RULE_INT(NPC, MaximumSummonTimerMs, 30000, "Maximum Summon Timeout for mobs to re-summon a player")
+RULE_INT(NPC, NPCSummonTimer, 6000, "Default Summon Timer for NPCs")
 RULE_BOOL(NPC, NPCIgnoreLevelBasedHasteCaps, false, "Ignores hard coded level based haste caps.")
 RULE_INT(NPC, NPCHasteCap, 150, "Haste cap for non-v3(over haste) haste")
 RULE_INT(NPC, NPCHastev3Cap, 25, "Haste cap for v3(over haste) haste")
@@ -746,6 +756,8 @@ RULE_INT(Range, ClientPositionUpdates, 300, "Distance in which the own changed p
 RULE_INT(Range, CriticalDamage, 80, "The packet range in which critical hit messages are sent")
 RULE_INT(Range, MobCloseScanDistance, 600, "Close scan distance")
 RULE_INT(Range, MaxDistanceToClickDoors, 100, "Max distance that a client can click a door from (Client says 'You can't reach that' at roughly 25-50 for most doors)")
+RULE_REAL(Range,MaxZSummonOffsetIndoor, 10.00, "Maximum distance on Z Axis to which a player can be summoned indoors")
+RULE_REAL(Range,MaxZSummonOffsetOutdoor, 255.00, "Maximum distance on Z Axis to which a player can be summoned outdoors")
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Bots)
@@ -1145,6 +1157,7 @@ RULE_BOOL(Items, DisableSpellFocusEffects, false, "Enable this to disable Spell 
 RULE_BOOL(Items, SummonItemAllowInvisibleAugments, false, "Enable this to allow augments to be put in invisible augment slots of items in Client::SummonItem")
 RULE_BOOL(Items, AugmentItemAllowInvisibleAugments, false, "Enable this to allow augments to be put in invisible augment slots by players")
 RULE_BOOL(Items, AlwaysReturnHandins, true, "Enable this to always return handins to the player")
+RULE_BOOL(Items, NPCUseRecommendedLevels, false, "Enable to have NPCs scale item stats by recommended levels")
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Parcel)
@@ -1162,6 +1175,97 @@ RULE_REAL(EvolvingItems, PercentOfSoloExperience, 0.1, "Percentage of solo exper
 RULE_REAL(EvolvingItems, PercentOfGroupExperience, 0.1, "Percentage of group experience allocated to evolving items that require experience.")
 RULE_REAL(EvolvingItems, PercentOfRaidExperience, 0.1, "Percentage of solo experience allocated to evolving items that require experience.")
 RULE_INT(EvolvingItems, DelayUponEquipping, 30000, "Delay in ms before an evolving item will earn rewards after equipping.  Default is 30000ms or 30s.")
+RULE_CATEGORY_END()
+
+RULE_CATEGORY(Custom)
+// Multiclassing Engine
+RULE_BOOL(Custom, 	ServerAuthStats, 						true, "Enable this rule in order to send explicit client updates. Requires client dll.")
+RULE_BOOL(Custom, 	MulticlassingEnabled, 					true, "Enable this to enable all multiclass-related tweaks. Requires ServerAuthStats and UseDynamicAATimers for full functionality.")
+RULE_BOOL(Custom, 	UseDynamicAATimers, 					true, "Enable using dynamic AA timers. Required to deconflict multiclass AA timers")
+
+// The Heroes Journey Options
+RULE_BOOL(Custom, 	SuspendGroupBuffs, 						true, 	"Enable this to cause self buffs and group's buffs to not tick down")
+RULE_BOOL(Custom, 	FadeNPCDebuffsOutofCombat, 				true, 	"Enable to to cause NPCs to lose all buffs automatically when combat ends")
+RULE_BOOL(Custom, 	UseTHJItemMutations, 					true, 	"Rename items according to THJ standards and apply other mutations")
+RULE_BOOL(Custom, 	ClearRestingDetrimentalEffectsEnabled, 	true, 	"Remove detrimental spell effects from self and pets when OOC regen engages")
+RULE_REAL(Custom, 	ItemExtraSpellAmtMaximumPercentage, 	0.0, 	"Adjust the maximum effectiveness of Spell Damage and Heal Amount. 0.0 to Disable, 1.0 to allow adding up to the base effect value, 2.0 to allow double effect value, etc.")
+RULE_INT(Custom,    AbsolutePetLimit, 						1, 	    "Maximum number of permanent pets that a player can control.")
+RULE_REAL(Custom,	PetPlacementAdjustment,					-0.6,  	"Adjust pet formation positioning")
+RULE_REAL(Custom,	PetPlacementDistance ,					7.0,  	"Adjust pet formation positioning")
+RULE_REAL(Custom, 	NonDaggerBackstabMultiplier1H, 			0.75, 	"Multiple Backstabs conducted with not-1hp by this amount")
+RULE_REAL(Custom, 	NonDaggerBackstabMultiplier2H,			0.50, 	"Multiple Backstabs conducted with not-1hp 2h weapon by this amount")
+RULE_BOOL(Custom, 	MonkSkillAttacksAreH2HForProcs, 		true, 	"Read the name")
+RULE_BOOL(Custom,   AttuneOnExp,							false,  "Trigger attuneable items on gaining exp instead of on equip")
+
+// Item Upgrades
+RULE_BOOL(Custom, 	DoItemUpgrades, 						true, "Retribution item upgrades")
+RULE_REAL(Custom, 	Tier2ItemDropRate, 						25, "Percentage chance that a drop will be upgraded to Tier 2. These percentages are independent of one another, but Tier2 is rolled first. Default value is twice as rare as Tier2.")
+RULE_REAL(Custom, 	Tier1ItemDropRate, 						50, "Percentage chance that a drop will be upgraded to Tier 1. These percentages are independent of one another, but Tier2 is rolled first. Default value is twice as rare as Unmodified")
+RULE_BOOL(Custom, 	PowerSourceItemUpgrade, 		 		false, "Enable to add Power Source to all items which can be equipped by some race and class.")
+RULE_REAL(Custom, 	PowerSourceItemUpgradeRateScale, 		1.0, "Scale XP rate of items using this value.")
+RULE_REAL(Custom, 	PowerSourceItemTier1RateFloor,			1.0, "Smallest percentage item XP that a white can can award for a tier 1 item")
+RULE_REAL(Custom, 	PowerSourceItemTier2RateFloor,			0.1, "Smallest percentage item XP that a white can can award for a tier 2 item")
+
+// General QoL and Customizations
+RULE_BOOL(Custom, 	UseDynamicItemDiscoveryTags, 			true, "Enable appfending Discovered By: items using the charmfile method")
+RULE_BOOL(Custom, 	TauntTogglesPetTanking, 				true, "Enable to let pets hold aggro while taunt is on")
+RULE_BOOL(Custom, 	EnablePetBags, 							true, "Enable 'Pet Bag' features")
+RULE_REAL(Custom,  	ItemExtraSpellAmtBardFactor, 			0.10, "Factor to multiple rune healamt bonus values by for bard songs")
+RULE_BOOL(Custom,   MultipleTwoHandedProcs,					false, "Allow two-handed weapons to proc multiple procs (such as augments)")
+RULE_INT(Custom,   	DevastatingFrenzyRateModifier, 			0, "Subtract this value from the chance for Devastating Frenzy to trigger")
+RULE_REAL(Custom,   DevastatingFrenzyDamageMultiplier, 		1.0, "Apply this multiplier for each 20% missing hp from target whenever Devastating Frenzy triggers")
+RULE_REAL(Custom,   FrenzyScaleOnWeaponAmount,				3.0, "Add weapon damage multiplied by this value to frenzy")
+RULE_REAL(Custom,   MonkScaleOnWeaponAmount,				0.0, "Add weapon damage multiplied by this value to strikes & kicks")
+RULE_REAL(Custom,   MonkScaleOnHandFeetQuality,				0.0, "Add Damage to strikes and kicks based on hand and foot item quality")
+RULE_BOOL(Custom,   ExcludeTempPetsFromProcChanceSPA,       false, "Enable this rule to prevent SE_ProcChance from affecting procs that spawn temporary pets")
+RULE_BOOL(Custom, 	AttuneItemOnClick,						false, "Forcibly items  on click")
+RULE_BOOL(Custom,   BypassMulticlassStackConflict,			false, "Allow all of your class spells to stack")
+RULE_BOOL(Custom, 	ApplyPetAAToSwarm, 						true, "Apply 'Pet AAs' to Swarm Pets")
+RULE_INT(Custom, 	StaticInstanceVersion,					UINT8_MAX, "Instances with the version will load as StaticInstanceTemplateVersion and have respawns disabled")
+RULE_INT(Custom, 	StaticInstanceTemplateVersion,			0, "Template version for non-respawning instances")
+RULE_INT(Custom, 	FarmingInstanceVersion,					254, "Instances with the version will load as FarmingInstanceTemplateVersion and have long-respawn mobs disabled")
+RULE_INT(Custom, 	FarmingInstanceTemplateVersion,			0, "Template version for non-respawning instances")
+RULE_INT(Custom, 	EventInstanceVersion,					253, "Instances with the version will load as EventInstanceTemplateVersion and have loot removed")
+RULE_INT(Custom, 	EventInstanceTemplateVersion,			0, "Template version for event instances")
+RULE_INT(Custom, 	EventInstanceRespawnSeconds,			600, "Default respawn time for enemies in event instances")
+RULE_BOOL(Custom, 	DoubleAttackSkillRanged, 				false, "Use Double & Triple Attack skills for ranged attacks")
+RULE_BOOL(Custom, 	TemporaryStunImmunity, 					true, "Clients become immune to Stun for a duration after being stunned")
+RULE_BOOL(Custom,   ForceNPCFearPathing, 					true, "Forces NPCs to Fear path even if Combat:EnableFearPathing is disabled.")
+RULE_INT(Custom,    EventEOMDropChance,						1,     "Increase this value to make EoM drops during event more rare")
+RULE_BOOL(Custom,	GroupIncentiveProgram,					false, "Enable GroupIncentiveProgram")
+RULE_BOOL(Custom, 	UseAAEXPVeterancy,						false, "Use max AA on any character in account for value of AA:ModernAAScalingAALimit if it is higher")
+RULE_REAL(Custom,	CastedSpellCritBonusRatio, 				1.0, "Multiply casted (Not procs) spells crit ratio by this value")
+RULE_REAL(Custom,	ProcSpellCritBonusRatio, 				1.0, "Multiply proc spells crit ratio by this value")
+RULE_STRING(Custom, HubZones, 								"151,22", "Hub zones to display in #zoneshard output")
+RULE_STRING(Custom,	AA339Whitelist,							"16121,16122,16123,16675,16676,16677,30887,30888,30889,aa545", "List of spell/aa ids with trigger on cast effects that will trigger off AA abilities")
+RULE_INT(Custom,    ProcReflectPercentage,					50, "The percentage of damage to be dealt if a damaging proc is reflected.")
+
+RULE_BOOL(Custom,   UseHasteForMeleeSkills, 				true, "Use Haste stat for activated melee skills")
+RULE_REAL(Custom, 	PetWeaponTuningMult, 					0.5, "Value added to weapon ratio for pet weapon usage")
+
+RULE_BOOL(Custom,	UseCustomUnattuneCombine,				false, "Use plat-based unattuner and combiner")
+RULE_INT(Custom,	UnattuneCostMultiplier,					25, "Multiply this number by item_value to get cost in platinum to unattune")
+RULE_INT(Custom,	CombineCostMultiplier,					25, "Multiply this number by item_value to get cost in platinum to combine")
+
+RULE_INT(Custom, 	ServerAuthKey, 							0, "Value used to verify patch serial number")
+RULE_STRING(Custom,	AutoSellBagIDs, 						"500030,500031", "ItemID of Auto-Sell Bag")
+RULE_STRING(Custom,	StackOnlyBags, 							"", "ItemIDs of bags that only allow stackable items")
+
+RULE_INT(Custom, 	PetProcRateCap,							100, "Maximum item (weapon & aug) proc rate bonus available to pets, 0 to disable.")
+RULE_INT(Custom,    PetFlurryAACap,							75,	 "Maximum amount of SE_PetFlurry which can be applied by an AA, 100 to disable")
+RULE_INT(Custom,    PetCriticalAACap,						75,	 "Maximum amount of SE_PetCriticalHit which can be applied by an AA, 100 to disable")
+RULE_INT(Custom, 	PetMaximumSpellCritRatio,				300, "Maximum spell critical ratio which can be applied to pets, 0 to disable. (300 is 3x damage)")
+RULE_INT(Custom, 	PetMaximumSpellCritChance,				75,  "Maximum spell critical chance which can be applied to pets, 100 to disable.")
+
+RULE_BOOL(Custom,   AdditiveBackstabDamage,					true, "Backstab damage functions as extra damage rather than a replacement of normal damage.")
+RULE_INT(Custom, 	SE_DamageModifierMaxCumulativeValue, 	300, "Maximum cumulative which can be applied by SE_DamageModifier via spells")
+
+RULE_INT(Custom,   	StunImmunityTimerMultiplier,			3, "Multiplier for the amount of time a player should be immune to stun after being stunned.")
+RULE_INT(Custom,   	SilenceImmunityTimerMultiplier,			3, "Multiplier for the amount of time a player should be immune to silence after being silenced.")
+
+// Seasonal
+RULE_INT(Custom,  	EnableSeasonalCharacters, 				0, "Set to Seasonal ID to track for current Seasonal characters, 0 to disable.")
+
 RULE_CATEGORY_END()
 
 #undef RULE_CATEGORY
